@@ -21,6 +21,27 @@
     <label>Final size <output id="sizeOut">85%</output></label>
     <input type="range" id="sizeSlider" min="50" max="95" step="1" value="85">
   </fieldset>
+  
+  <fieldset>
+    <legend>Colour</legend>
+    <div class="row">
+      <label>Front <input type="color" id="colFront" value="#efe6cf"></label>
+      <label>Sides <input type="color" id="colSide" value="#6e5b3a"></label>
+      <label>Backdrop <input type="color" id="colBg" value="#b9d3a0"></label>
+      
+    </div>
+    <label>Colour mode</label>
+    <select id="colorMode" style="margin-bottom:10px">
+      <option value="3" selected>Forest tech panels</option>
+      <option value="0">Solid (front + sides)</option>
+      <option value="1">Vertical gradient</option>
+      <option value="2">Animated rainbow</option>
+    </select>
+    <label class="check"><input type="checkbox" id="lightToggle" checked> Lighting</label>
+    <label class="check"><input type="checkbox" id="treesToggle" checked> Tiny trees</label>
+    <label class="check"><input type="checkbox" id="meshToggle" checked> Teal glowing mesh</label>
+    <label class="check"><input type="checkbox" id="dripToggle" checked> Drip lines</label>
+  </fieldset>
 
 </div>
 </body>
