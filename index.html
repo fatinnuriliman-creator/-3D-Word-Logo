@@ -9,5 +9,19 @@
 </head>
 <body>
 <canvas id="glcanvas"></canvas>
+<button id="panelToggle" title="Show / hide settings (H)">Settings</button>
+<div id="panel">
+  <h1>Animation Logo</h1>
+  <p class="sub">Set your parameters, then start the sequence.</p>
+
+  <fieldset>
+    <legend>Logo</legend>
+    <label>Extrusion depth <output id="depthOut">0.30</output></label>
+    <input type="range" id="depthSlider" min="0.05" max="1.2" step="0.01" value="0.30" style="margin-bottom:10px">
+    <label>Final size <output id="sizeOut">85%</output></label>
+    <input type="range" id="sizeSlider" min="50" max="95" step="1" value="85">
+  </fieldset>
+
+</div>
 </body>
 </html>
