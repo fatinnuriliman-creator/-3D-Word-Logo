@@ -43,6 +43,21 @@
     <label class="check"><input type="checkbox" id="dripToggle" checked> Drip lines</label>
   </fieldset>
 
+  <fieldset>
+    <legend>Animation</legend>
+    <label>Speed <output id="speedOut">1.0x</output></label>
+    <input type="range" id="speedSlider" min="0.25" max="3" step="0.05" value="1" style="margin-bottom:10px">
+    <label class="check"><input type="checkbox" id="loopToggle" checked> Loop sequence</label>
+    <div class="row">
+      <button id="btnStart" class="primary">Start</button>
+      <button id="btnPause">Pause</button>
+      <button id="btnReset">Reset</button>
+    </div>
+    <div id="status">Phase: <b id="phaseLabel">Ready</b></div>
+    <p class="hint">Keys: Space = pause/resume, Enter = start, R = reset, H = hide/show settings</p>
+    <div id="error"></div>
+  </fieldset>
+
 </div>
 </body>
 </html>
