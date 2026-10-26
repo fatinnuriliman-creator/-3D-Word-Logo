@@ -30,7 +30,7 @@ const START_FRAC = 0.35;       // initial logo width as fraction of screen
 const ease = p => p * p * (3 - 2 * p);          // smoothstep easing
 const lerp = (a, b, t) => a + (b - a) * t;
 
-const state = { time: 0, playing: false, loop: true, speed: 1, finalFrac: 0.85 };
+const state = { time: 0, playing: false, loop: false, speed: 1, finalFrac: 0.85 };
 
 /** Returns the logo pose (rotation, size, offset) for animation time t */
 function getPose(t) {
