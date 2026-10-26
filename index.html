@@ -11,9 +11,65 @@
 <canvas id="glcanvas"></canvas>
 <button id="panelToggle" title="Show / hide settings (H)">Settings</button>
 <div id="panel">
-  
+  <h1>Animation Logo</h1>
+  <p class="sub">Set your parameters, then start the sequence.</p>
+
+  <fieldset>
+    <legend>Logo</legend>
+    <label>Logo text (up to 6 letters)</label>
+    <input type="text" id="wordInput" value="ECO" maxlength="6" spellcheck="false" style="margin-bottom:4px">
+    <p class="hint" style="margin:0 0 10px">Letters available: A C E F G H I L N O S T U V</p>
+    <label>Extrusion depth <output id="depthOut">0.30</output></label>
+    <input type="range" id="depthSlider" min="0.05" max="1.2" step="0.01" value="0.30" style="margin-bottom:10px">
+    <label>Final size <output id="sizeOut">85%</output></label>
+    <input type="range" id="sizeSlider" min="50" max="95" step="1" value="85">
+  </fieldset>
+
+  <fieldset>
+    <legend>Colour</legend>
+    <div class="row">
+      <label>Front <input type="color" id="colFront" value="#efe6cf"></label>
+      <label>Sides <input type="color" id="colSide" value="#6e5b3a"></label>
+      <label>Backdrop <input type="color" id="colBg" value="#b9d3a0"></label>
+      
+    </div>
+    <label>Colour mode</label>
+    <select id="colorMode" style="margin-bottom:10px">
+      <option value="3" selected>Forest tech panels</option>
+      <option value="0">Solid (front + sides)</option>
+      <option value="1">Vertical gradient</option>
+      <option value="2">Animated rainbow</option>
+    </select>
+    <label class="check"><input type="checkbox" id="lightToggle" checked> Lighting</label>
+    <label class="check"><input type="checkbox" id="treesToggle" checked> Tiny trees</label>
+    <label class="check"><input type="checkbox" id="meshToggle" checked> Teal glowing mesh</label>
+    <label class="check"><input type="checkbox" id="dripToggle" checked> Drip lines</label>
+  </fieldset>
+
+  <fieldset>
+    <legend>Animation</legend>
+    <label>Speed <output id="speedOut">1.0x</output></label>
+    <input type="range" id="speedSlider" min="0.25" max="3" step="0.05" value="1" style="margin-bottom:10px">
+    <label class="check"><input type="checkbox" id="loopToggle" checked> Loop sequence</label>
+    <div class="row">
+      <button id="btnStart" class="primary">Start</button>
+      <button id="btnPause">Pause</button>
+      <button id="btnReset">Reset</button>
+    </div>
+    <div id="status">Phase: <b id="phaseLabel">Ready</b></div>
+    <p class="hint">Keys: Space = pause/resume, Enter = start, R = reset, H = hide/show settings</p>
+    <div id="error"></div>
+  </fieldset>
 
 </div>
-<script src="m1_geometry.js"></script>
+<!-- Load order matters: each file uses functions from the files above it. Keep all 8 files in the SAME folder as this page. -->
+<script src="m5_core.js"></script>    <!-- Member 5: helpers + error handling -->
+<script src="m1_geometry.js"></script><!-- Member 1: letters + extrusion -->
+<script src="m4_shaders.js"></script> <!-- Member 4: lighting / colour shaders -->
+<script src="m1_webgl.js"></script>   <!-- Member 1: WebGL setup + drawLogo -->
+<script src="m4_effects.js"></script> <!-- Member 4: trees, mesh, drips, backdrop -->
+<script src="m2_animation.js"></script><!-- Member 2: animation + main loop -->
+<script src="m3_ui.js"></script>      <!-- Member 3: controls -->
+<script src="m5_main.js"></script>    <!-- Member 5: init + tests -->
 </body>
 </html>
