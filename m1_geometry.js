@@ -60,9 +60,9 @@ const LETTER_SPACING = 0.18;         // gap between letters
 // rectangle helper -> quad (CCW)
 const rect = (x0, y0, x1, y1) => [x0,y0, x1,y0, x1,y1, x0,y1];
 
-// Curved stroke: a ring segment from angle a0 to a1 (degrees), split into n small CCW quads
-const arc = (a0, a1, n) => {
-  const cx = 0.45, cy = 0.5, ro = [0.45, 0.5], ri = [0.25, 0.3], out = [];
+// Curved stroke: a ring segment from angle a0 to a1 (degrees) around centre (cx,cy) with radii rx,ry, split into n small CCW quads
+const arc = (a0, a1, n, cx = 0.45, cy = 0.5, rx = 0.45, ry = 0.5) => {
+  const ro = [rx, ry], ri = [rx - T, ry - T], out = [];   // outer radii, inner radii (stroke thickness T)
   for (let i = 0; i < n; i++) {
     const s = deg2rad(a0 + (a1 - a0) * i / n), e = deg2rad(a0 + (a1 - a0) * (i + 1) / n);
     out.push([cx + ro[0]*Math.cos(s), cy + ro[1]*Math.sin(s), cx + ro[0]*Math.cos(e), cy + ro[1]*Math.sin(e),
@@ -71,25 +71,55 @@ const arc = (a0, a1, n) => {
   return out;
 };
 
-// Glyph table: width + strokes
 const GLYPHS = {
-  T: { w: 0.8, strokes: [ rect(0, 1-T, 0.8, 1), rect(0.3, 0, 0.5, 1-T) ] },
-  V: { w: 0.8, strokes: [ [0.3,0, 0.5,0, 0.2,1, 0,1], [0.3,0, 0.5,0, 0.8,1, 0.6,1] ] },
-  L: { w: 0.7, strokes: [ rect(0,0,T,1), rect(T,0,0.7,T) ] },
-  I: { w: T,   strokes: [ rect(0,0,T,1) ] },
+  // ---------- Letters A-Z ----------
+  A: { w: 0.8, strokes: [ rect(0,0,T,1-T), rect(0.6,0,0.8,1-T), rect(0,1-T,0.8,1), rect(T,0.4,0.6,0.6) ] },
+  B: { w: 0.8, strokes: [ rect(0,0,T,1), rect(T,0.8,0.55,1), rect(T,0.4,0.55,0.6), rect(T,0,0.55,T) ]
+                          .concat(arc(-90,90,14, 0.55,0.7,0.25,0.3), arc(-90,90,14, 0.55,0.3,0.25,0.3)) },
+  C: { w: 0.9, strokes: arc(40, 320, 24) },
+  D: { w: 0.8, strokes: [ rect(0,0,T,1), rect(T,0.8,0.45,1), rect(T,0,0.45,T) ].concat(arc(-90,90,16, 0.45,0.5,0.35,0.5)) },
   E: { w: 0.7, strokes: [ rect(0,0,T,1), rect(T,1-T,0.7,1), rect(T,0.4,0.6,0.6), rect(T,0,0.7,T) ] },
   F: { w: 0.7, strokes: [ rect(0,0,T,1), rect(T,1-T,0.7,1), rect(T,0.4,0.6,0.6) ] },
-  H: { w: 0.8, strokes: [ rect(0,0,T,1), rect(0.6,0,0.8,1), rect(T,0.4,0.6,0.6) ] },
-  U: { w: 0.8, strokes: [ rect(0,T,T,1), rect(0.6,T,0.8,1), rect(0,0,0.8,T) ] },
-  O: { w: 0.9, strokes: arc(0, 360, 28) },
-  C: { w: 0.9, strokes: arc(40, 320, 24) },
   G: { w: 0.8, strokes: [ rect(0,T,T,1-T), rect(0,0,0.8,T), rect(0,1-T,0.8,1),
                           rect(0.6,T,0.8,0.5), rect(0.4,0.3,0.8,0.5) ] },
-  A: { w: 0.8, strokes: [ rect(0,0,T,1-T), rect(0.6,0,0.8,1-T), rect(0,1-T,0.8,1), rect(T,0.4,0.6,0.6) ] },
+  H: { w: 0.8, strokes: [ rect(0,0,T,1), rect(0.6,0,0.8,1), rect(T,0.4,0.6,0.6) ] },
+  I: { w: T,   strokes: [ rect(0,0,T,1) ] },
+  J: { w: 0.8, strokes: [ rect(0.6,0.3,0.8,1) ].concat(arc(180,360,14, 0.4,0.3,0.4,0.3)) },
+  K: { w: 0.8, strokes: [ rect(0,0,T,1), [0.2,0.5, 0.42,0.5, 0.8,1, 0.56,1], [0.56,0, 0.8,0, 0.42,0.5, 0.2,0.5] ] },
+  L: { w: 0.7, strokes: [ rect(0,0,T,1), rect(T,0,0.7,T) ] },
+  M: { w: 1.0, strokes: [ rect(0,0,T,1), rect(0.8,0,1,1), [0.4,0.3, 0.6,0.3, 0.2,1, 0,1], [0.4,0.3, 0.6,0.3, 1,1, 0.8,1] ] },
+  N: { w: 0.8, strokes: [ rect(0,0,T,1), rect(0.6,0,0.8,1), [T,0.6, 0.6,0, 0.6,0.4, T,1] ] },
+  O: { w: 0.9, strokes: arc(0, 360, 28) },
+  P: { w: 0.8, strokes: [ rect(0,0,T,1), rect(T,0.8,0.55,1), rect(T,0.4,0.55,0.6) ].concat(arc(-90,90,14, 0.55,0.7,0.25,0.3)) },
+  Q: { w: 0.9, strokes: arc(0, 360, 28).concat([ [0.7,0, 0.9,0, 0.75,0.25, 0.55,0.25] ]) },
+  R: { w: 0.8, strokes: [ rect(0,0,T,1), rect(T,0.8,0.55,1), rect(T,0.4,0.55,0.6), [0.6,0, 0.8,0, 0.5,0.4, 0.3,0.4] ].concat(arc(-90,90,14, 0.55,0.7,0.25,0.3)) },
   S: { w: 0.8, strokes: [ rect(0,1-T,0.8,1), rect(0,0.4,T,1-T), rect(0,0.4,0.8,0.6),
                           rect(0.6,T,0.8,0.6), rect(0,0,0.8,T) ] },
-  // N: two vertical bars + a diagonal quad (CCW)
-  N: { w: 0.8, strokes: [ rect(0,0,T,1), rect(0.6,0,0.8,1), [T,0.6, 0.6,0, 0.6,0.4, T,1] ] }
+  T: { w: 0.8, strokes: [ rect(0, 1-T, 0.8, 1), rect(0.3, 0, 0.5, 1-T) ] },
+  U: { w: 0.8, strokes: [ rect(0,T,T,1), rect(0.6,T,0.8,1), rect(0,0,0.8,T) ] },
+  V: { w: 0.8, strokes: [ [0.3,0, 0.5,0, 0.2,1, 0,1], [0.3,0, 0.5,0, 0.8,1, 0.6,1] ] },
+  W: { w: 1.4, strokes: [ [0.25,0, 0.45,0, 0.2,1, 0,1], [0.25,0, 0.45,0, 0.8,1, 0.6,1],
+                          [0.95,0, 1.15,0, 0.8,1, 0.6,1], [0.95,0, 1.15,0, 1.4,1, 1.2,1] ] },
+  X: { w: 0.9, strokes: [ [0,0, 0.25,0, 0.9,1, 0.65,1], [0.65,0, 0.9,0, 0.25,1, 0,1] ] },
+  Y: { w: 0.8, strokes: [ rect(0.3,0,0.5,0.45), [0.3,0.4, 0.5,0.4, 0.2,1, 0,1], [0.3,0.4, 0.5,0.4, 0.8,1, 0.6,1] ] },
+  Z: { w: 0.8, strokes: [ rect(0,0.8,0.8,1), rect(0,0,0.8,T), [0,0.2, 0.3,0.2, 0.8,0.8, 0.5,0.8] ] },
+
+  // ---------- Numbers 0-9 ----------
+  0: { w: 0.7, strokes: arc(0, 360, 28, 0.35, 0.5, 0.35, 0.5) },
+  1: { w: 0.6, strokes: [ rect(0.2,0,0.4,1), rect(0,0,0.6,T), [0,0.7, 0.2,0.8, 0.2,1, 0,0.9] ] },
+  2: { w: 0.8, strokes: [ rect(0,0.8,0.8,1), rect(0.6,0.5,0.8,0.8), rect(0,0.4,0.8,0.6), rect(0,T,T,0.4), rect(0,0,0.8,T) ] },
+  3: { w: 0.8, strokes: [ rect(0.6,0,0.8,1), rect(0,0.8,0.6,1), rect(0.2,0.4,0.6,0.6), rect(0,0,0.6,T) ] },
+  4: { w: 0.8, strokes: [ rect(0,0.4,T,1), rect(0,0.3,0.8,0.5), rect(0.6,0,0.8,1) ] },
+  5: { w: 0.8, strokes: [ rect(0,0.8,0.8,1), rect(0,0.5,T,0.8), rect(0,0.4,0.8,0.6), rect(0.6,T,0.8,0.6), rect(0,0,0.8,T) ] },
+  6: { w: 0.8, strokes: [ rect(0,0,T,1), rect(T,0.8,0.8,1), rect(T,0.4,0.8,0.6), rect(0.6,T,0.8,0.6), rect(T,0,0.8,T) ] },
+  7: { w: 0.8, strokes: [ rect(0,0.8,0.8,1), [0.2,0, 0.4,0, 0.8,0.85, 0.6,0.85] ] },
+  8: { w: 0.8, strokes: [ rect(0,0,T,1), rect(0.6,0,0.8,1), rect(T,0.8,0.6,1), rect(T,0.4,0.6,0.6), rect(T,0,0.6,T) ] },
+  9: { w: 0.8, strokes: [ rect(0.6,0,0.8,1), rect(0,0.8,0.6,1), rect(0,0.4,0.6,0.6), rect(0,0.4,T,1), rect(0,0,0.6,T) ] },
+
+  // ---------- Space and symbols ----------
+  " ": { w: 0.5, strokes: [] },
+  "-": { w: 0.6, strokes: [ rect(0,0.4,0.6,0.6) ] },
+  ".": { w: T,   strokes: [ rect(0,0,T,T) ] }
 };
 
 /**
