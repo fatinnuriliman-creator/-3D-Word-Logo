@@ -1,15 +1,7 @@
-/* =====================================================================
-   FILE:      m5_main.js
-   OWNER:     Member 5 - Integration, Testing & Reliability
-   CONTAINS:  renderStill() and init() that join all modules, WebGL context-loss handling, runSelfTest() (checks every animation stage)
-   USES:      everything (loaded last, after all other modules exist)
-   LOAD ORDER: 8 of 8
-   VIDEO:     Demonstrate the integration/testing code and explain the bugs fixed
-   ===================================================================== */
+
 "use strict";
 
 // Integration: the one place where all modules are started, in the right order
-// Before Member 2's file exists there is no animation loop, so draw one still frame (the logo is visible from step 1)
 function renderStill() {
   resizeCanvas();
   gl.clearColor(0, 0, 0, 0);
