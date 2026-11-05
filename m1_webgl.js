@@ -1,14 +1,6 @@
-/* =====================================================================
-   FILE:      m1_webgl.js
-   OWNER:     Member 1 - 3D Geometry Generation
-   CONTAINS:  VERT_SRC, WebGL context + shader program, buffers, rebuildGeometry() (uploads geometry), getWord() (the typed logo), camera constants, drawLogo(), resizeCanvas()
-   USES:      FRAG_SRC (m4_shaders), buildLogoGeometry + drawOverlay + ovBuf (m4_effects), $ / showError (m5_core)
-   LOAD ORDER: 4 of 8
-   VIDEO:     Explain the buffers, coordinate system and drawLogo()
-   ===================================================================== */
 "use strict";
 
-// MEMBER 1: vertex shader - positions each vertex (MVP matrix) and passes normals/colour info on
+// vertex shader
 const VERT_SRC = `
   attribute vec3 aPosition;
   attribute vec3 aNormal;
@@ -27,8 +19,7 @@ const VERT_SRC = `
     vUV = vec2(aPosition.x / uWordSize.x + 0.5, aPosition.y + 0.5);
   }`;
 
-// MEMBER 1: simple starter fragment shader (front colour, side colour, one light).
-// Member 4's FRAG_SRC (m4_shaders.js) replaces it automatically when that file is loaded.
+// Simple starter fragment shader (front colour, side colour, one light).
 const BASIC_FRAG_SRC = `
   precision mediump float;
   varying vec3 vNormal;
@@ -51,7 +42,7 @@ function compile(type, src) {
   if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh));
   return sh;
 }
-const prog = gl.createProgram();   // main program: VERT_SRC (Member 1) + FRAG_SRC (Member 4)
+const prog = gl.createProgram();   
 gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT_SRC));
 gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, typeof FRAG_SRC !== "undefined" ? FRAG_SRC : BASIC_FRAG_SRC));
 gl.bindAttribLocation(prog, 0, "aPosition");
@@ -77,7 +68,7 @@ const loc = {
 };
 
 const buffers = { pos: gl.createBuffer(), nor: gl.createBuffer(), side: gl.createBuffer() };
-// Keep only letters that have a shape in GLYPHS (m1_geometry.js), in capitals
+// Keep only letters that have a shape in GLYPHS in capitals
 const cleanWord = text => [...String(text).toUpperCase()].filter(ch => GLYPHS[ch]).join("");
 // The word to build: whatever the user typed in the box, or "ECO" if there is nothing usable
 const getWord = () => cleanWord(val("wordInput", "ECO")) || "ECO";
@@ -87,9 +78,9 @@ let logo = null;   // current geometry
 function rebuildGeometry() {
   const word = getWord();
   const depth = parseFloat(val("depthSlider", 0.3));
-  logo = (typeof buildLogoGeometry === "function")      // Member 4's version adds trees + effects
+  logo = (typeof buildLogoGeometry === "function")      
        ? buildLogoGeometry(word, depth) : buildLetterGeometry(word, depth);
-  if (typeof ovBuf !== "undefined") for (const k of ["meshLines", "meshPts", "drips"]) {          // MEMBER 4: upload overlay (mesh / drip) buffers
+  if (typeof ovBuf !== "undefined") for (const k of ["meshLines", "meshPts", "drips"]) {          
     gl.bindBuffer(gl.ARRAY_BUFFER, ovBuf[k]); gl.bufferData(gl.ARRAY_BUFFER, logo[k], gl.STATIC_DRAW);
   }
 
@@ -139,13 +130,13 @@ function drawLogo(pose, timeSec) {
   gl.enableVertexAttribArray(loc.aNormal);   gl.vertexAttribPointer(loc.aNormal, 3, gl.FLOAT, false, 0, 0);
   gl.bindBuffer(gl.ARRAY_BUFFER, buffers.side);
   gl.enableVertexAttribArray(loc.aSide);     gl.vertexAttribPointer(loc.aSide, 1, gl.FLOAT, false, 0, 0);
-  const triCount = checked("treesToggle", true)   // MEMBER 4: trees are extra triangles after the letters
+  const triCount = checked("treesToggle", true)  
      ? logo.count : logo.letterCount;
   gl.drawArrays(gl.TRIANGLES, 0, triCount);
-  if (typeof drawOverlay === "function") drawOverlay(mvp, timeSec);   // MEMBER 4: glowing mesh + drip lines drawn after the letters
+  if (typeof drawOverlay === "function") drawOverlay(mvp, timeSec);   
 }
 
-// MEMBER 1: keep the canvas pixel size equal to its on-screen size (sharp on high-DPI screens)
+// To keep the canvas pixel size equal to its on-screen size (sharp on high-DPI screens)
 function resizeCanvas() {
   const dpr = window.devicePixelRatio || 1;
   const w = Math.floor(canvas.clientWidth * dpr), h = Math.floor(canvas.clientHeight * dpr);
