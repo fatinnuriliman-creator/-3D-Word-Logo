@@ -64,7 +64,7 @@ const GLYPHS = {
   I: { w: T,   strokes: [ rect(0,0,T,1) ] },
   E: { w: 0.7, strokes: [ rect(0,0,T,1), rect(T,1-T,0.7,1), rect(T,0.4,0.6,0.6), rect(T,0,0.7,T) ] },
   F: { w: 0.7, strokes: [ rect(0,0,T,1), rect(T,1-T,0.7,1), rect(T,0.4,0.6,0.6) ] },
-  H: { w: 0.8, strokes: qqqqqqqqqqq[ rect(0,0,T,1), rect(0.6,0,0.8,1), rect(T,0.4,0.6,0.6) ] },
+  H: { w: 0.8, strokes: [ rect(0,0,T,1), rect(0.6,0,0.8,1), rect(T,0.4,0.6,0.6) ] },
   U: { w: 0.8, strokes: [ rect(0,T,T,1), rect(0.6,T,0.8,1), rect(0,0,0.8,T) ] },
   O: { w: 0.9, strokes: arc(0, 360, 28) },
   C: { w: 0.9, strokes: arc(40, 320, 24) },
