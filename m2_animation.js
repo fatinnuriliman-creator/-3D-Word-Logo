@@ -15,7 +15,7 @@
              -> float (move about) -> [shrink back to start if looping]
    --------------------------------------------------------------------- */
 const SEQUENCE = [
-  { name: "Hold",                d: 0.8 },
+  { name: "Hold",                d: 2.0 },
   { name: "Rotating right 180°", d: 1.8 },
   { name: "Returning",           d: 1.8 },
   { name: "Rotating left 180°",  d: 1.8 },
